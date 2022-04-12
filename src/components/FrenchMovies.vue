@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Film Français </h1>
-        <SortButtons  @sortBy="sortMovie" />
+        <SortButtons :movies="movies"  @sortBy="sortMovies" />
 
         <MoviesList :movies="movies"  :error="error" />
     </div>
@@ -31,26 +31,8 @@ export default {
             .catch(this.error = true)
         },
 
-        sortMovie: function (sortBy, order) {
-            if(sortBy == 'sortedByTitle'){
-                this.movies.sort(function(a, b){
-                    if(a.title < b.title) { return ((order) ? '-' : '') + 1; }
-                    if(a.title > b.title) { return ((order) ? '' : '-') + 1; }
-                    return 0;
-                })
-            }else if(sortBy == 'sortedByDate'){
-                this.movies.sort(function(a, b){
-                    if(a.release_date < b.release_date) { return ((order) ? '' : '-') + 1; }
-                    if(a.release_date > b.release_date) { return ((order) ? '-' : '') + 1; }
-                    return 0;
-                })
-            }else if(sortBy == 'sortedByRating'){
-                this.movies.sort(function(a, b){
-                    if(a.vote_average < b.vote_average) { return ((order) ? '' : '-') + 1; }
-                    if(a.vote_average > b.vote_average) { return ((order) ? '-' : '') + 1; }
-                    return 0;
-                })
-            }
+        sortMovies(sortedMovies) {  // déclenchée si tri effectuée dans SortButtons
+            this.movies = sortedMovies; // on stocke les films triés dans les movies des datas du composant 
         }
     },
     created: function(){

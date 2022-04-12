@@ -1,27 +1,58 @@
 <template>
     <div class="btn-container">
-        <button type="button" class="btn btn-dark" v-on:click="sortBy('sortedByTitle')">Trier par titre</button>
-        <button type="button" class="btn btn-dark" v-on:click="sortBy('sortedByDate')">Trier par date de sortie</button>
-        <button type="button" class="btn btn-dark" v-on:click="sortBy('sortedByRating')">Trier par note</button>
+        <button type="button" class="btn btn-dark" v-on:click="sortMovie('sortedByTitle')">Trier par titre</button>
+        <button type="button" class="btn btn-dark" v-on:click="sortMovie('sortedByDate')">Trier par date de sortie</button>
+        <button type="button" class="btn btn-dark" v-on:click="sortMovie('sortedByRating')">Trier par note</button>
     </div>
 </template>
 
 <script>
 export default {
     name: 'SortButtons',
+    props: ['movies'],
     data() {
         return{
-            sortedBy: {
-                sortedByTitle: false, // false : films non triés par ordre alphabétique
-                sortedByDate: false, // false : films non triés par date
-                sortedByRating: false, // false : films non triés par note
-            }
+            sortedByTitle: false, // false : films non triés par ordre alphabétique
+            sortedByDate: false, // false : films non triés par date
+            sortedByRating: false, // false : films non triés par note
         }
     },
     methods: {
-        sortBy(sort_by){
-            this.$emit( 'sortBy', sort_by, !this.sortedBy[sort_by] )
-            this.sortedBy[sort_by] = !this.sortedBy[sort_by]
+        sortMovie: function (sortBy) {
+            if(sortBy == 'sortedByTitle'){
+                let sortedByTitle = this.sortedByTitle;
+
+                this.$props.movies.sort(function(a, b){
+                    if(a.title < b.title) { return ((sortedByTitle) ? '' : '-') + 1; }
+                    if(a.title > b.title) { return ((sortedByTitle) ? '-' : '') + 1; }
+                    return 0;
+                })
+
+                this.sortedByTitle = !this.sortedByTitle;
+            }else if(sortBy == 'sortedByDate'){
+                let sortedByDate = this.sortedByDate;
+
+                this.$props.movies.sort(function(a, b){
+                    if(a.release_date < b.release_date) { return ((sortedByDate) ? '-' : '') + 1; }
+                    if(a.release_date > b.release_date) { return ((sortedByDate) ? '' : '-') + 1; }
+                    return 0;
+                })
+
+                this.sortedByDate = !this.sortedByDate;
+            }else if(sortBy == 'sortedByRating'){
+                let sortedByRating = this.sortedByRating;
+
+                this.$props.movies.sort(function(a, b){
+                    if(a.vote_average < b.vote_average) { return ((sortedByRating) ? '-' : '') + 1; }
+                    if(a.vote_average > b.vote_average) { return ((sortedByRating) ? '' : '-') + 1; }
+                    return 0;
+                })
+
+                this.sortedByRating = !this.sortedByRating;
+            }
+
+            let sortedMovies = this.$props.movies
+            this.$emit("sort-movies", sortedMovies)
         }
     }
 }
