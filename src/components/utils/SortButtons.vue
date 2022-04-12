@@ -19,40 +19,36 @@ export default {
     },
     methods: {
         sortMovie: function (sortBy) {
+            let that = this;
             if(sortBy == 'sortedByTitle'){
-                let sortedByTitle = this.sortedByTitle;
-
                 this.$props.movies.sort(function(a, b){
-                    if(a.title < b.title) { return ((sortedByTitle) ? '' : '-') + 1; }
-                    if(a.title > b.title) { return ((sortedByTitle) ? '-' : '') + 1; }
+                    if(a.title < b.title) { return ((that.sortedByTitle) ? '' : '-') + 1; }
+                    if(a.title > b.title) { return ((that.sortedByTitle) ? '-' : '') + 1; }
                     return 0;
                 })
 
                 this.sortedByTitle = !this.sortedByTitle;
             }else if(sortBy == 'sortedByDate'){
-                let sortedByDate = this.sortedByDate;
 
                 this.$props.movies.sort(function(a, b){
-                    if(a.release_date < b.release_date) { return ((sortedByDate) ? '-' : '') + 1; }
-                    if(a.release_date > b.release_date) { return ((sortedByDate) ? '' : '-') + 1; }
+                    if(a.release_date < b.release_date) { return ((that.sortedByDate) ? '-' : '') + 1; }
+                    if(a.release_date > b.release_date) { return ((that.sortedByDate) ? '' : '-') + 1; }
                     return 0;
                 })
 
                 this.sortedByDate = !this.sortedByDate;
             }else if(sortBy == 'sortedByRating'){
-                let sortedByRating = this.sortedByRating;
 
                 this.$props.movies.sort(function(a, b){
-                    if(a.vote_average < b.vote_average) { return ((sortedByRating) ? '-' : '') + 1; }
-                    if(a.vote_average > b.vote_average) { return ((sortedByRating) ? '' : '-') + 1; }
+                    if(a.vote_average < b.vote_average) { return ((that.sortedByRating) ? '-' : '') + 1; }
+                    if(a.vote_average > b.vote_average) { return ((that.sortedByRating) ? '' : '-') + 1; }
                     return 0;
                 })
 
                 this.sortedByRating = !this.sortedByRating;
             }
 
-            let sortedMovies = this.$props.movies
-            this.$emit("sort-movies", sortedMovies)
+            this.$emit("sort-movies", this.$props.movies)
         }
     }
 }
